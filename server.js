@@ -21,6 +21,7 @@ mongoose.connection.on('error', err => {
 
 const app = express();
 app.use(express.static(path.join(__dirname, '/public')));
+app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -34,6 +35,7 @@ app.use('/articles', routes[1]);
 app.use('/newsletters', routes[2]);
 app.use('/auteurs', routes[3]);
 app.use('/categories', routes[4]);
+app.use('/users', routes[5]);
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:' + port);

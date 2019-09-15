@@ -1,7 +1,7 @@
-let mongoose = require('mongoose');
-let Schema = mongoose.Schema;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-let newslettersSchema = new Schema({
+var newslettersSchema = new Schema({
   datePublication: Date,
   contenu: String
 });

@@ -1,6 +1,6 @@
 let express = require('express');
 let router = express.Router();
-let Newsletter = require('../schemas/Newsletter');
+let Newsletter = require('../models/NewslettersModel');
 
 router.route('/create').post((req, res) => {
   Newsletter.create({

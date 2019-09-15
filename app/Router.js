@@ -5,7 +5,8 @@ var routes = [
   require('./routes/ArticlesRoute'),
   require('./routes/NewslettersRoute'),
   require('./routes/AuteursRoute'),
-  require('./routes/CategoriesRoute')
+  require('./routes/CategoriesRoute'),
+  require('./routes/UsersRoute')
 ];
 
 module.exports = routes;
