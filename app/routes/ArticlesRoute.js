@@ -1,6 +1,6 @@
-let express = require('express');
-let router = express.Router();
-let Article = require('../models/ArticlesModel');
+var express = require('express');
+var router = express.Router();
+var Article = require('../models/ArticlesModel');
 
 // ROUTES PUBLIQUES
 

@@ -1,21 +1,15 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
-var auteursSchema = new Schema({
-  pseudo: String
-});
-
-var categoriesSchema = new Schema({
-  nom: String
-});
-
+var auteursSchema = require('./Auteurs');
+var categoriesSchema = require('./Categories');
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var articlesSchema = new Schema({
   titre: String,
   image: String,
   contenu: String,
-  categorie: categoriesSchema,
-  auteur: auteursSchema
+  categorie: ObjectId,
+  auteur: ObjectId
 });
 
 module.exports = articlesSchema;

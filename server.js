@@ -32,6 +32,8 @@ console.log("Ecoute sur le port " . port);
 app.use('/abonnes', routes[0]);
 app.use('/articles', routes[1]);
 app.use('/newsletters', routes[2]);
+app.use('/auteurs', routes[3]);
+app.use('/categories', routes[4]);
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:' + port);
@@ -40,6 +42,3 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res, next) => {
-  res.sendFile('./public/index.html');
-});
