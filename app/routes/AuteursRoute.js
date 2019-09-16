@@ -2,22 +2,40 @@ let express = require('express');
 let router = express.Router();
 let Auteur = require('../models/AuteursModel');
 
-// ROUTES PUBLIQUES
-
 router.route('/').get((req, res, next) => {
-  Auteur.find((err, auteurs) => {
-    if (err) {
-      return next(new Error(err));
-    }
-    res.json(auteurs)
-  })
+  Auteur.find()
+    .select('_id pseudo')
+    .exec()
+    .then(docs => {
+      const response = {
+        count: docs.length,
+        auteurs: docs.map(doc => {
+          return {
+            id: doc._id,
+            pseudo: doc.pseudo,
+            request: {
+              type: 'GET',
+              url: 'http://localhost:4000/auteurs/' + doc._id
+            }
+          }
+        })
+      };
+      res.status(200).json(response);
+    })
 });
 
 router.route('/:id').get((req, res) => {
   let id = req.params.id;
-  Auteur.findById(id, (err, auteur) => {
-    res.json(auteur);
-  })
+  Auteur.findById(id)
+    .select('_id pseudo')
+    .exec()
+    .then(doc => {
+      const response = {
+        id: doc._id,
+        pseudo: doc.pseudo
+      };
+      res.status(200).json(response);
+    });
 });
 
 // CRUD
@@ -26,11 +44,15 @@ router.route('/create').post((req, res) => {
   Auteur.create({
       pseudo: req.body.pseudo
     },
-    function (error, auteur) {
+    function (error, doc) {
       if (error) {
         res.status(400).send("Impossible de créer l'auteur");
       }
-      res.status(200).json(auteur)
+      const response = {
+        id: doc._id,
+        pseudo: doc.pseudo
+      };
+      res.status(200).json(response);
     })
 });
 

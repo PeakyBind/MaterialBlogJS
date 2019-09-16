@@ -8,12 +8,16 @@ export default class {
   }
   getArticles() {
     const url = API_URL + '/articles/';
-
-    return axios.get(url).then(response => response.data);
-  }
+  return axios.get(url).then(response => response.data);
+}
 
   getArticle(id) {
     const url = API_URL + '/articles/' + id;
     return axios.get(url).then(response => response.data);
+  }
+
+  logIn(data) {
+    const url = API_URL + '/users/login/';
+    return axios.post(url, data).then(response => response.data);
   }
 }

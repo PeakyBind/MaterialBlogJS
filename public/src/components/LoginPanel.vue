@@ -8,16 +8,16 @@
           <br>
           <div class="input-field">
             <i class="material-icons prefix">account_circle</i>
-            <input id="pseudo" type="text" class="validate" name="pseudo">
+            <input v-model="pseudo">
             <label for="pseudo">Pseudo</label>
           </div>
           <div class="input-field">
             <i class="material-icons prefix">error</i>
-            <input id="mdp" type="password" class="validate" name="mdp">
+            <input v-model="password">
             <label for="mdp">Password</label>
           </div>
           <div class="text-center">
-            <button type="submit" class="btn btn-info waves-effect waves-light">Connect</button>
+            <button @click.prevent="logIn" class="btn btn-info waves-effect waves-light">Connect</button>
           </div>
         </form>
       </div>
@@ -26,7 +26,23 @@
 </template>
 
 <script>
+  import APIService from '../APIService';
+  const apiService = new APIService();
+
   export default {
     name: 'LoginPanel',
+    data() {
+      return {
+        pseudo: '',
+        password: ''
+      }
+    },
+    methods: {
+      logIn() {
+        apiService.logIn({pseudo: this.pseudo, password: this.password}).then((data => {
+          console.log(data);
+        }));
+      }
+    }
   }
 </script>

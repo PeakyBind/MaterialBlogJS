@@ -1,7 +1,6 @@
 var express = require('express'),
   path = require('path'),
   bodyParser = require('body-parser'),
-  cors = require('cors'),
   mongoose = require('mongoose');
   routes = require('./app/Router');
   config = require('./app/Config');
@@ -23,12 +22,13 @@ const app = express();
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
-app.use(cors());
 
-var port = config.APP_PORT || 4000;
-
-app.listen(port);
-console.log("Ecoute sur le port " . port);
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  next();
+});
 
 app.use('/abonnes', routes[0]);
 app.use('/articles', routes[1]);
@@ -37,10 +37,7 @@ app.use('/auteurs', routes[3]);
 app.use('/categories', routes[4]);
 app.use('/users', routes[5]);
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:' + port);
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  next();
-});
+var port = config.APP_PORT || 4000;
 
+app.listen(port);
+console.log("Ecoute sur le port " . port);

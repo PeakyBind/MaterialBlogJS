@@ -2,22 +2,64 @@ var express = require('express');
 var router = express.Router();
 var Article = require('../models/ArticlesModel');
 
-// ROUTES PUBLIQUES
-
 router.route('/').get((req, res, next) => {
-  Article.find((err, articles) => {
-    if (err) {
-      return next(new Error(err));
-    }
-    res.json(articles)
-  })
+  Article.find()
+    .select('_id titre image contenu categorie auteur')
+    .populate({ path: 'categorie', select: '_id nom'})
+    .populate({ path: 'auteur', select: '_id pseudo'})
+    .exec()
+    .then(docs => {
+      const response = {
+        count: docs.length,
+        articles: docs.map(doc => {
+          return {
+            id: doc._id,
+            titre: doc.titre,
+            image: doc.image,
+            contenu: doc.contenu,
+            categorie: {
+              id: (doc.categorie != null) ? doc.categorie._id : null,
+              nom: (doc.categorie != null) ? doc.categorie.nom : null,
+            },
+            auteur: {
+              id: (doc.auteur != null) ? doc.auteur._id : null,
+              pseudo: (doc.auteur != null) ? doc.auteur.pseudo : null
+            },
+            request: {
+              type: 'GET',
+              url: 'http://localhost:4000/articles/' + doc._id
+            }
+          }
+        })
+      };
+      res.status(200).json(response);
+    })
 });
 
 router.route('/:id').get((req, res) => {
   let id = req.params.id;
-  Article.findById(id, (err, article) => {
-    res.json(article);
-  })
+  Article.findById(id)
+    .select('_id titre image contenu categorie auteur')
+    .populate({ path: 'categorie', select: '_id nom'})
+    .populate({ path: 'auteur', select: '_id pseudo'})
+    .exec()
+    .then(doc => {
+      const response = {
+        id: doc._id,
+        titre: doc.titre,
+        image: doc.image,
+        contenu: doc.contenu,
+        categorie: {
+          id: (doc.categorie != null) ? doc.categorie._id : null,
+          nom: (doc.categorie != null) ? doc.categorie.nom : null,
+        },
+        auteur: {
+          id: (doc.auteur != null) ? doc.auteur._id : null,
+          pseudo: (doc.auteur != null) ? doc.auteur.pseudo : null
+        }
+      };
+      res.status(200).json(response);
+    })
 });
 
 // CRUD
@@ -30,11 +72,25 @@ router.route('/create').post((req, res) => {
     categorie: req.body.categorie,
     auteur: req.body.auteur
   },
-  function (error, Article) {
+  function (error, doc) {
     if (error) {
       res.status(400).send("Impossible de créer l'article");
     }
-    res.status(200).json(Article)
+    const response = {
+      id: doc._id,
+      titre: doc.titre,
+      image: doc.image,
+      contenu: doc.contenu,
+      categorie: {
+        id: doc.categorie._id,
+        nom: doc.categorie.nom
+      },
+      auteur: {
+        id: doc.auteur._id,
+        pseudo: doc.auteur.pseudo
+      }
+    };
+    res.status(200).json(response);
   })
 });
 

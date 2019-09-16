@@ -5,19 +5,41 @@ let Abonne = require('../models/AbonnesModel');
 // ROUTES PUBLIQUES
 
 router.route('/').get((req, res, next) => {
-  Abonne.find((err, abonnes) => {
-    if (err) {
-      return next(new Error(err));
-    }
-    res.json(abonnes)
-  })
+  Abonne.find()
+    .select('email nom _id')
+    .exec()
+    .then(docs => {
+      const response = {
+        count: docs.length,
+        abonnes: docs.map(doc => {
+          return {
+            id: doc._id,
+            email: doc.email,
+            nom: doc.nom,
+            request: {
+              type: 'GET',
+              url: 'http://localhost:4000/abonnes/' + doc._id
+            }
+          }
+        })
+      };
+      res.status(200).json(response);
+    })
 });
 
 router.route('/:id').get((req, res) => {
   let id = req.params.id;
-  Abonne.findById(id, (err, abonne) => {
-    res.json(abonne);
-  })
+  Abonne.findById(id)
+    .select('email nom _id')
+    .exec()
+    .then(doc => {
+      const response = {
+        id: doc._id,
+        email: doc.email,
+        nom: doc.nom
+      };
+      res.status(200).json(response);
+    });
 });
 
 // CRUD
@@ -27,11 +49,16 @@ router.route('/create').post((req, res) => {
       email: req.body.email,
       nom: req.body.nom
     },
-    function (error, Abonne) {
+    function (error, doc) {
       if (error) {
         res.status(400).send("Impossible de créer l'abonné");
       }
-      res.status(200).json(Abonne)
+      const response = {
+        id: doc._id,
+        email: doc.email,
+        nom: doc.nom
+      };
+      res.status(200).json(response);
     })
 });
 
