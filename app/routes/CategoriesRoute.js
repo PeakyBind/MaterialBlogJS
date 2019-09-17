@@ -1,6 +1,7 @@
-let express = require('express');
-let router = express.Router();
-let Categorie = require('../models/CategoriesModel');
+var express = require('express');
+var router = express.Router();
+var Categorie = require('../models/CategoriesModel');
+var checkAuth = require('../middlewares/CheckAuth');
 
 
 router.route('/').get((req, res, next) => {
@@ -41,7 +42,7 @@ router.route('/:id').get((req, res) => {
 
 // CRUD
 
-router.route('/create').post((req, res) => {
+router.post('/create', checkAuth, (req, res) => {
   Categorie.create({
       nom: req.body.nom
     },
@@ -57,7 +58,7 @@ router.route('/create').post((req, res) => {
     })
 });
 
-router.route('/:id').put((req, res) => {
+router.put('/:id', checkAuth, (req, res) => {
   let id = req.params.id;
   Categorie.findById(id, (err, categorie) => {
     if (err) {
@@ -73,7 +74,7 @@ router.route('/:id').put((req, res) => {
   })
 });
 
-router.route('/delete/:id').get((req, res, next) => {
+router.delete('/:id', checkAuth, (req, res, next) => {
   let id = req.params.id;
   Categorie.findByIdAndRemove(id, (err, categorie) => {
     if (err) {

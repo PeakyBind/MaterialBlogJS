@@ -3,8 +3,9 @@ var router = express.Router();
 var bcrypt = require('bcrypt');
 var jwtUtils = require('./../utils/jwt.utils');
 var User = require('./../models/UsersModel');
+var checkAuth = require('../middlewares/CheckAuth');
 
-router.route('/').get((req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
   User.find()
     .select('_id email pseudo password')
     .exec()
@@ -28,7 +29,7 @@ router.route('/').get((req, res, next) => {
     })
 });
 
-router.route('/:id').get((req, res) => {
+router.get('/:id', checkAuth, (req, res) => {
   let id = req.params.id;
   User.findById(id)
     .select('_id email pseudo password')
@@ -102,7 +103,6 @@ router.route('/login').post((req, res) => {
         bcrypt.compare(password, user.password, (errByCrypt, resByCrypt) => {
           if (resByCrypt) {
             var token = jwtUtils.generateTokenForUsers(user);
-            res.setHeader('Authorization', 'Bearer ' + token);
             return res.status(200).json({
               'user': user._id,
               'token': token
@@ -116,21 +116,6 @@ router.route('/login').post((req, res) => {
       }
     }
   })
-});
-
-router.route('/admin').get((req, res) => {
-  var headerAuth = req.headers['authorization'];
-  var userId = jwtUtils.getUserId(headerAuth);
-
-  if (userId == '') {
-    return res.status(400).json({"Erreur": "Mauvais Token"});
-  }
-  User.findOne({ _id: userId }, (err, user) => {
-    if (err) {
-      return res.status(200).json(err)
-    }
-    return res.status(200).json(user.password);
-  });
 });
 
 module.exports = router;

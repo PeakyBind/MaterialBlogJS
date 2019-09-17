@@ -1,6 +1,33 @@
 var express = require('express');
 var router = express.Router();
 var Article = require('../models/ArticlesModel');
+var multer = require('multer');
+var checkAuth = require('../middlewares/CheckAuth');
+
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  }
+});
+
+var fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+var upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
 
 router.route('/').get((req, res, next) => {
   Article.find()
@@ -64,10 +91,10 @@ router.route('/:id').get((req, res) => {
 
 // CRUD
 
-router.route('/create').post((req, res) => {
+router.post('/create', checkAuth, upload.single('image'), (req, res) => {
   Article.create({
     titre: req.body.titre,
-    image: req.body.image,
+    image: 'http://localhost:4000/' + req.file.destination + req.file.filename,
     contenu: req.body.contenu,
     categorie: req.body.categorie,
     auteur: req.body.auteur
@@ -83,18 +110,16 @@ router.route('/create').post((req, res) => {
       contenu: doc.contenu,
       categorie: {
         id: doc.categorie._id,
-        nom: doc.categorie.nom
       },
       auteur: {
         id: doc.auteur._id,
-        pseudo: doc.auteur.pseudo
       }
     };
     res.status(200).json(response);
   })
 });
 
-router.route('/:id').put((req, res) => {
+router.put('/:id', checkAuth, (req, res) => {
   let id = req.params.id;
   Article.findById(id, (err, article) => {
     if (err) {
@@ -114,7 +139,7 @@ router.route('/:id').put((req, res) => {
   })
 });
 
-router.route('/delete/:id').get((req, res, next) => {
+router.delete('/:id', checkAuth, (req, res, next) => {
   let id = req.params.id;
   Article.findByIdAndRemove(id, (err, abonne) => {
     if (err) {

@@ -1,7 +1,4 @@
-
 var jwt = require('jsonwebtoken');
-
-const JWT_SIGN_SECRET = '0edafaufe7eaf223fjaefa3feaeelknvwx4afufhaeflbehbv442432Ufjea3';
 
 module.exports = {
   generateTokenForUsers: (userData) => {
@@ -9,7 +6,7 @@ module.exports = {
       {
         userId: userData._id
       },
-      JWT_SIGN_SECRET,
+      process.env.JWT_SIGN_SECRET,
       {
         expiresIn: '1h'
       }
@@ -23,12 +20,12 @@ module.exports = {
     var token = module.exports.parseAuthorization(authorization);
     if (token != null) {
       try {
-        var jwtToken = jwt.verify(token, JWT_SIGN_SECRET);
+        var jwtToken = jwt.verify(token, process.env.JWT_SIGN_SECRET);
         if (jwtToken != null) {
           userId = jwtToken.userId
         }
       } catch (e) {
-
+        console.log(e);
       }
       return userId
     }

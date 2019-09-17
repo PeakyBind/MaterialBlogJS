@@ -1,6 +1,7 @@
-let express = require('express');
-let router = express.Router();
-let Abonne = require('../models/AbonnesModel');
+var express = require('express');
+var router = express.Router();
+var Abonne = require('../models/AbonnesModel');
+var checkAuth = require('../middlewares/CheckAuth');
 
 // ROUTES PUBLIQUES
 
@@ -44,7 +45,7 @@ router.route('/:id').get((req, res) => {
 
 // CRUD
 
-router.route('/create').post((req, res) => {
+router.post('/create', checkAuth, (req, res) => {
   Abonne.create({
       email: req.body.email,
       nom: req.body.nom
@@ -62,7 +63,7 @@ router.route('/create').post((req, res) => {
     })
 });
 
-router.route('/:id').put((req, res) => {
+router.put('/:id', checkAuth , (req, res) => {
   let id = req.params.id;
   Abonne.findById(id, (err, abonne) => {
     if (err) {
@@ -79,7 +80,7 @@ router.route('/:id').put((req, res) => {
   })
 });
 
-router.route('/delete/:id').get((req, res, next) => {
+router.delete('/:id', checkAuth, (req, res, next) => {
   let id = req.params.id;
   Abonne.findByIdAndRemove(id, (err, abonne) => {
     if (err) {

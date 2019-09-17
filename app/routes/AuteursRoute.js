@@ -1,6 +1,7 @@
-let express = require('express');
-let router = express.Router();
-let Auteur = require('../models/AuteursModel');
+var express = require('express');
+var router = express.Router();
+var Auteur = require('../models/AuteursModel');
+var checkAuth = require('../middlewares/CheckAuth');
 
 router.route('/').get((req, res, next) => {
   Auteur.find()
@@ -40,7 +41,7 @@ router.route('/:id').get((req, res) => {
 
 // CRUD
 
-router.route('/create').post((req, res) => {
+router.post('/create', checkAuth, (req, res) => {
   Auteur.create({
       pseudo: req.body.pseudo
     },
@@ -56,7 +57,7 @@ router.route('/create').post((req, res) => {
     })
 });
 
-router.route('/:id').put((req, res) => {
+router.put('/:id', checkAuth, (req, res) => {
   let id = req.params.id;
   Auteur.findById(id, (err, auteur) => {
     if (err) {
@@ -72,7 +73,7 @@ router.route('/:id').put((req, res) => {
   })
 });
 
-router.route('/delete/:id').get((req, res, next) => {
+router.delete('/:id', checkAuth, (req, res, next) => {
   let id = req.params.id;
   Auteur.findByIdAndRemove(id, (err, auteur) => {
     if (err) {

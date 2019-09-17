@@ -2,11 +2,13 @@ var express = require('express'),
   path = require('path'),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose');
+  dotenv = require('dotenv');
   routes = require('./app/Router');
-  config = require('./app/Config');
+
+dotenv.config();
 
 mongoose.connect(
-  config.DB,
+  process.env.MONGO_DB,
   {useNewUrlParser: true}
   ).then(
   () => {console.log("La connexion à la base de données a bien été établie.")},
@@ -22,6 +24,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
+app.use('/uploads', express.static('uploads'));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -37,7 +40,7 @@ app.use('/auteurs', routes[3]);
 app.use('/categories', routes[4]);
 app.use('/users', routes[5]);
 
-var port = config.APP_PORT || 4000;
+var port = process.env.APP_PORT || 4000;
 
 app.listen(port);
 console.log("Ecoute sur le port " . port);

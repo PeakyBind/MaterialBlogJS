@@ -1,6 +1,7 @@
-let express = require('express');
-let router = express.Router();
-let Newsletter = require('../models/NewslettersModel');
+var express = require('express');
+var router = express.Router();
+var Newsletter = require('../models/NewslettersModel');
+var checkAuth = require('../middlewares/CheckAuth');
 
 router.route('/').get((req, res, next) => {
   Newsletter.find()
@@ -42,7 +43,7 @@ router.route('/:id').get((req, res) => {
 
 // CRUD
 
-router.route('/create').post((req, res) => {
+router.post('/create', checkAuth, (req, res) => {
   Newsletter.create({
       datePublication: req.body.datePublication,
       contenu: req.body.contenu
@@ -60,7 +61,7 @@ router.route('/create').post((req, res) => {
     })
 });
 
-router.route('/:id').put((req, res) => {
+router.put('/:id', checkAuth, (req, res) => {
   let id = req.params.id;
   Newsletter.findById(id, (err, newsletter) => {
     if (err) {
@@ -77,7 +78,7 @@ router.route('/:id').put((req, res) => {
   })
 });
 
-router.route('/delete/:id').get((req, res, next) => {
+router.delete('/:id', checkAuth, (req, res, next) => {
   let id = req.params.id;
   Newsletter.findByIdAndRemove(id, (err, newsletter) => {
     if (err) {
