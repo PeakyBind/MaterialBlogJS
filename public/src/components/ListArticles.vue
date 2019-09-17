@@ -8,7 +8,7 @@
 
     <div v-for="article in articles">
 
-      <router-link :to="{ name: 'showArticle', params: { id: article._id }}">{{ article.titre }}</router-link>
+      <router-link :to="{ name: 'showArticle', params: { id: article.id }}">{{ article.titre }}</router-link>
 
       <h2><a href="#">{{ article.titre }}</a></h2>
 
@@ -47,7 +47,7 @@
     methods: {
       getArticles() {
         apiService.getArticles().then((data) => {
-          this.articles = data;
+          this.articles = data.articles;
         })
       }
     },

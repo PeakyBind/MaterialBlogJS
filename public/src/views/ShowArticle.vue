@@ -1,5 +1,6 @@
 <template>
   <div>
+    <default-nav></default-nav>
     <!-- Page Content -->
     <div class="container">
 
@@ -20,6 +21,7 @@
 
   import SingleArticle from './../components/singleArticle';
   import Sidebar from './partials/Siderbar';
+  import DefaultNav from './partials/DefaultNav';
   import Foot from './partials/Foot';
 
   export default {
@@ -27,7 +29,8 @@
     components: {
       SingleArticle,
       Sidebar,
-      Foot
+      Foot,
+      DefaultNav
     },
   };
 </script>

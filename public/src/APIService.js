@@ -6,6 +6,7 @@ export default class {
   constructor () {
 
   }
+
   getArticles() {
     const url = API_URL + '/articles/';
   return axios.get(url).then(response => response.data);
@@ -19,5 +20,10 @@ export default class {
   logIn(data) {
     const url = API_URL + '/users/login/';
     return axios.post(url, data).then(response => response.data);
+  }
+
+  getUser(id) {
+    const url = API_URL + '/users/' + id;
+    return axios.get(url).then(response => response.data);
   }
 }

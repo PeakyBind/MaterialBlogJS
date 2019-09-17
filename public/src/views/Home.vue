@@ -1,5 +1,7 @@
 <template>
   <div>
+    <default-nav></default-nav>
+
     <!-- Page Content -->
     <div class="container">
 
@@ -21,13 +23,15 @@
 import ListArticles from './../components/ListArticles';
 import Sidebar from './partials/Siderbar';
 import Foot from './partials/Foot';
+import DefaultNav from './partials/DefaultNav';
 
 export default {
   name: 'home',
   components: {
     ListArticles,
     Sidebar,
-    Foot
+    Foot,
+    DefaultNav
   },
 };
 </script>

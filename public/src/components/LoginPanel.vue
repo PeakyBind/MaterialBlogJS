@@ -40,7 +40,11 @@
     methods: {
       logIn() {
         apiService.logIn({pseudo: this.pseudo, password: this.password}).then((data => {
-          console.log(data);
+          if (data.user && data.token) {
+            sessionStorage.setItem('user', data.user);
+            sessionStorage.setItem('jwt', data.token);
+            this.$router.push({ name: 'admin' })
+          }
         }));
       }
     }
