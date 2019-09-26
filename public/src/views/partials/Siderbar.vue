@@ -7,21 +7,8 @@
 
       <ul class="collection">
 
-        <li>
-          <a href="categorie/bidon" class="collection-item">
-            Bidon    </a>
-        </li>
-        <li>
-          <a href="categorie/design-web" class="collection-item">
-            Design web    </a>
-        </li>
-        <li>
-          <a href="categorie/developpement-backend" class="collection-item">
-            Développement backend    </a>
-        </li>
-        <li>
-          <a href="categorie/developpement-frontend" class="collection-item">
-            Développement frontend    </a>
+        <li v-for="categorie in categories">
+          <router-link :to="{ name: 'showCategorie', params: { id: categorie.id} }">{{ categorie.nom }}</router-link>
         </li>
 
       </ul>
@@ -55,7 +42,25 @@
 </template>
 
 <script>
+  import APIService from "../../APIService";
+  const apiService = new APIService();
+
   export default {
-    name: 'Sidebar'
+    name: 'Sidebar',
+    data: function () {
+      return {
+        categories: []
+      }
+    },
+    methods: {
+      getCategories() {
+        apiService.getCategories().then((data) => {
+          this.categories = data.categories;
+        })
+      }
+    },
+    mounted() {
+      this.getCategories();
+    }
   }
 </script>

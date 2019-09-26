@@ -8,16 +8,13 @@
 
     <div v-for="article in articles">
 
-      <router-link :to="{ name: 'showArticle', params: { id: article.id }}">{{ article.titre }}</router-link>
-
-      <h2><a href="#">{{ article.titre }}</a></h2>
+      <h2><router-link :to="{ name: 'showArticle', params: { id: article.id }}">{{ article.titre }}</router-link></h2>
 
       <p class="lead">
-        by <a href="#">pascal</a>
+        by <a href="#">{{ article.auteur.pseudo }}</a>
       </p>
 
-      <p> Posted on
-        Thu 02 Feb 2017     </p>
+      <p> Posted on {{ convertDate(article.createdAt) }}</p>
 
       <hr>
       <img class="img-responsive z-depth-2" :src="article.image" alt="">
@@ -34,22 +31,24 @@
 </template>
 
 <script>
-  import APIService from '../APIService';
+  import APIService from '../../APIService';
+  import convertDate from "../../utils/convertDate";
   const apiService = new APIService();
 
   export default {
-    name: 'ListArticles',
+    name: 'ShowCategorie',
     data() {
       return {
-        articles: []
+        articles: {}
       }
     },
     methods: {
       getArticles() {
-        apiService.getArticles().then((data) => {
+        apiService.getArticlesByCategorie(this.$route.params.id).then((data) => {
           this.articles = data.articles;
         })
-      }
+      },
+      convertDate,
     },
     mounted() {
       this.getArticles();
@@ -59,18 +58,18 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+  h3 {
+    margin: 40px 0 0;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
+  a {
+    color: #42b983;
+  }
 </style>

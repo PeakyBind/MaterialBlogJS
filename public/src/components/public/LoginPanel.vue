@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import APIService from '../APIService';
+  import APIService from '../../APIService';
   const apiService = new APIService();
 
   export default {
@@ -43,7 +43,7 @@
           if (data.user && data.token) {
             sessionStorage.setItem('user', data.user);
             sessionStorage.setItem('jwt', data.token);
-            this.$router.push({ name: 'admin' })
+            this.$router.push({ name: 'adminHome' })
           }
         }));
       }

@@ -4,28 +4,28 @@
     <!-- Blog Post -->
 
     <!-- Title -->
-    <h1>Material Design for Bootstrap</h1>
+    <h1>{{ article.titre }}</h1>
 
     <!-- Author -->
     <p class="lead">
-      by <a href="#">gnagan</a>
+      by <a href="#">{{ auteurPseudo }}</a>
     </p>
 
     <hr>
 
     <!-- Date/Time -->
     <p>Posted on
-      Thu 02 Feb 2017</p>
+      {{ convertDate(article.createdAt) }}</p>
 
     <hr>
 
     <!-- Preview Image -->
-    <img class="img-responsive z-depth-2" src="http://lorempixel.com/750/390/technics/2" alt="">
+    <img class="img-responsive z-depth-2" :src="article.image" alt="">
 
     <hr>
 
     <!-- Post Content -->
-    <div>Google designed a Material Design to make a web more beautiful. Twitter created a Bootstrap to support you in faster and easier development of responsive websites. Material Design for Bootstrap contains both!</div>
+    <div>{{ article.contenu }}</div>
 
 
     <hr>
@@ -33,13 +33,15 @@
 </template>
 
 <script>
-  import APIService from '../APIService';
+  import APIService from '../../APIService';
+  import convertDate from "../../utils/convertDate";
   const apiService = new APIService();
 
   export default {
-    name: 'SingleArticle',
+    name: 'showArticle',
     data() {
       return {
+        auteurPseudo: '',
         article: {}
       }
     },
@@ -47,8 +49,10 @@
       getArticle() {
         apiService.getArticle(this.$route.params.id).then((data) => {
           this.article = data;
+          this.auteurPseudo = data.auteur.pseudo;
         })
-      }
+      },
+      convertDate,
     },
     mounted() {
       this.getArticle();

@@ -6,7 +6,7 @@
     <div class="container">
 
       <div class="row">
-        <list-articles></list-articles>
+        <router-view></router-view>
         <sidebar></sidebar>
       </div>
       <hr>
@@ -20,13 +20,13 @@
 
 <script>
 
-import ListArticles from './../components/ListArticles';
+import ListArticles from '../components/public/ListArticles';
 import Sidebar from './partials/Siderbar';
 import Foot from './partials/Foot';
 import DefaultNav from './partials/DefaultNav';
 
 export default {
-  name: 'home',
+  name: 'public',
   components: {
     ListArticles,
     Sidebar,

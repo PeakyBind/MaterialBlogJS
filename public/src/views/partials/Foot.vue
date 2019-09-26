@@ -34,6 +34,8 @@
 </template>
 
 <script>
+  import checkAuthorization from "../../middlewares/checkAuthorization";
+
   export default {
     name: 'Foot'
   }
