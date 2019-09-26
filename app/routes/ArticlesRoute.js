@@ -141,11 +141,11 @@ router.put('/:id', checkAuth, (req, res) => {
 
 router.delete('/:id', checkAuth, (req, res, next) => {
   let id = req.params.id;
-  Article.findByIdAndRemove(id, (err, abonne) => {
+  Article.findByIdAndRemove(id, (err, article) => {
     if (err) {
       return next(new Error('Article non trouvé'));
     } else {
-      res.status(400).json('Supprimé avec succès');
+      res.status(200).json('Supprimé avec succès');
     }
   })
 });

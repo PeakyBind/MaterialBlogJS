@@ -80,7 +80,7 @@ router.delete('/:id', checkAuth, (req, res, next) => {
     if (err) {
       return next(new Error('Catégorie non trouvée'));
     } else {
-      res.status(400).json('Supprimé avec succès');
+      res.status(200).json('Supprimé avec succès');
     }
   })
 });
