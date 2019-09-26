@@ -6,8 +6,10 @@ var articlesSchema = new Schema({
   titre: { type: String, required: true},
   image: String,
   contenu: String,
-  categorie: { type: ObjectId, ref: 'Categorie'},
+  categories: [{ type: ObjectId, ref: 'Categorie'}],
   auteur: { type: ObjectId, ref: 'Auteur'}
+}, {
+  timestamps: true
 });
 
 module.exports = articlesSchema;
