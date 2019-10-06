@@ -1,3 +1,5 @@
+// ./app/routes/AbonnesRoute.js
+
 var express = require('express');
 var router = express.Router();
 var Abonne = require('../models/AbonnesModel');
@@ -72,7 +74,12 @@ router.put('/:id', checkAuth , (req, res) => {
       abonne.email = req.body.email;
       abonne.nom = req.body.nom;
       abonne.save().then( abonne => {
-        res.json('Abonné mis à jour');
+        const response = {
+          id: abonne._id,
+          email: abonne.email,
+          nom: abonne.nom
+        };
+        res.status(200).json(response);
       }).catch(err => {
         res.status(400).send('Erreur lors de l\'enregistrement');
       })

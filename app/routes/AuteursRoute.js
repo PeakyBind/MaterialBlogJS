@@ -1,3 +1,5 @@
+// ./app/routes/AuteursRoute.js
+
 var express = require('express');
 var router = express.Router();
 var Auteur = require('../models/AuteursModel');
@@ -65,7 +67,11 @@ router.put('/:id', checkAuth, (req, res) => {
     } else {
       auteur.pseudo = req.body.pseudo;
       auteur.save().then( auteur => {
-        res.json('Auteur mis à jour');
+        const response = {
+          id: auteur._id,
+          pseudo: auteur.pseudo
+        };
+        res.status(200).json(response);
       }).catch(err => {
         res.status(400).send('Erreur lors de l\'enregistrement');
       })

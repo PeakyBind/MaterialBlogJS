@@ -1,3 +1,5 @@
+// ./app/schemas/Auteurs.js
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 

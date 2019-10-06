@@ -1,3 +1,5 @@
+// ./app/models/ArticlesModel.js
+
 var mongoose = require('mongoose');
 var schema = require('./../schemas/Articles');
 

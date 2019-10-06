@@ -1,3 +1,5 @@
+// ./app/routes/NewsLettersRoute.js
+
 var express = require('express');
 var router = express.Router();
 var Newsletter = require('../models/NewslettersModel');
@@ -70,7 +72,12 @@ router.put('/:id', checkAuth, (req, res) => {
       newsletter.datePublication = req.body.datePublication;
       newsletter.contenu = req.body.contenu;
       newsletter.save().then( newsletter => {
-        res.json('Newsletter mise à jour');
+        const response = {
+          id: newsletter._id,
+          datePublication: newsletter.datePublication,
+          contenu: newsletter.contenu
+        };
+        res.status(200).json(response);
       }).catch(err => {
         res.status(400).send('Erreur lors de l\'enregistrement');
       })

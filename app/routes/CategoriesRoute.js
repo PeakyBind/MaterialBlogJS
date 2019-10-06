@@ -1,3 +1,5 @@
+// ./app/routes/CategoriesRoute.js
+
 var express = require('express');
 var router = express.Router();
 var Categorie = require('../models/CategoriesModel');
@@ -66,7 +68,11 @@ router.put('/:id', checkAuth, (req, res) => {
     } else {
       categorie.nom = req.body.nom;
       categorie.save().then( categorie => {
-        res.json('Catégorie mise à jour');
+        const response = {
+          id: categorie._id,
+          nom: categorie.nom
+        };
+        res.status(200).json(response);
       }).catch(err => {
         res.status(400).send('Erreur lors de l\'enregistrement');
       })

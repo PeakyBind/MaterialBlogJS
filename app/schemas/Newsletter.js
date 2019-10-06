@@ -1,3 +1,5 @@
+// ./app/schemas/Newsletter.js
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
