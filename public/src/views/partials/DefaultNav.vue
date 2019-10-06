@@ -1,3 +1,5 @@
+<!-- ./src/views/partials/DefaultNav.vue -->
+
 <template>
   <!-- Navigation -->
   <nav class="navbar z-depth-2 info-color">
@@ -17,7 +19,7 @@
 </template>
 
 <script>
-  export default {
-    name: 'defaultNav'
-  }
+export default {
+  name: 'defaultNav',
+};
 </script>

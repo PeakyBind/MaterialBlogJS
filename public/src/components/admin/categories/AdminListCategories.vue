@@ -1,3 +1,5 @@
+<!-- ./src/components/admin/categories/AdminListCategories.vue -->
+
 <template>
   <!-- Main jumbotron for a primary marketing message or call to action -->
   <div class="jumbotron">
@@ -28,36 +30,17 @@
 </template>
 
 <script>
-  import APIService from '../../../APIService';
-  const apiService = new APIService();
+import { mapState, mapActions } from 'vuex';
 
-  export default {
-    name: 'AdminListCategories',
-    data() {
-      return {
-        categories: [],
-      };
-    },
-    methods: {
-      getCategories() {
-        apiService.getCategories().then((data) => {
-          this.categories = data.categories;
-        });
-      },
-      deleteCategorie(id) {
-        apiService.deleteCategorie(id).then(
-          () => {
-            let categorieToDelete = this.categories.find((element) => {
-              return element.id === id
-            });
-            let categorieToDeleteId = this.categories.indexOf(categorieToDelete);
-            this.categories.splice(categorieToDeleteId, 1);
-          }
-        );
-      }
-    },
-    mounted() {
-      this.getCategories();
-    },
-  };
+export default {
+  name: 'AdminListCategories',
+  methods: {
+    ...mapActions([
+      'deleteCategorie',
+    ]),
+  },
+  computed: mapState([
+    'categories',
+  ]),
+};
 </script>

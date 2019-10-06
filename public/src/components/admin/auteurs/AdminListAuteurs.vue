@@ -1,3 +1,5 @@
+<!-- ./src/components/admin/auteurs/AdminListAuteurs.vue -->
+
 <template>
   <!-- Main jumbotron for a primary marketing message or call to action -->
   <div class="jumbotron">
@@ -28,36 +30,17 @@
 </template>
 
 <script>
-  import APIService from '../../../APIService';
-  const apiService = new APIService();
+import { mapState, mapActions } from 'vuex';
 
-  export default {
-    name: 'AdminListAuteurs',
-    data() {
-      return {
-        auteurs: [],
-      };
-    },
-    methods: {
-      getAuteurs() {
-        apiService.getAuteurs().then((data) => {
-          this.auteurs = data.auteurs;
-        });
-      },
-      deleteAuteur(id) {
-        apiService.deleteAuteur(id).then(
-          () => {
-            let auteurToDelete = this.auteurs.find((element) => {
-              return element.id === id
-            });
-            let auteurToDeleteId = this.auteurs.indexOf(auteurToDelete);
-            this.auteurs.splice(auteurToDeleteId, 1);
-          }
-        );
-      }
-    },
-    mounted() {
-      this.getAuteurs();
-    },
-  };
+export default {
+  name: 'AdminListAuteurs',
+  methods: {
+    ...mapActions([
+      'deleteAuteur',
+    ]),
+  },
+  computed: mapState([
+    'auteurs',
+  ]),
+};
 </script>

@@ -1,3 +1,5 @@
+<!-- ./src/components/admin/categories/EditCategorie.vue -->
+
 <template>
   <div class="container theme-showcase" role="main">
 
@@ -9,7 +11,7 @@
       <form method="post">
         <div>
           <label for="nom" >Titre</label>
-          <input type="text" name="nom" id="nom" v-model="nom"/>
+          <input type="text" name="nom" id="nom" v-model="categorie.nom"/>
         </div>
         <div><input type="submit" @click.prevent="sendForm"/></div>
       </form>
@@ -19,32 +21,32 @@
 </template>
 
 <script>
-  import APIService from "../../../APIService";
-  const apiService = new APIService();
+import { mapGetters, mapActions } from 'vuex';
 
-  export default {
-    name: 'EditCategorie',
-    data() {
-      return {
-        id: String,
-        nom: String,
-      }
+export default {
+  name: 'EditCategorie',
+  data() {
+    return {
+      categorie: {},
+    };
+  },
+  methods: {
+    ...mapActions([
+      'editCategorie',
+    ]),
+    sendForm() {
+      this.editCategorie(this.categorie).then(() => {
+        this.$router.push({ name: 'adminListCategories' });
+      });
     },
-    methods: {
-      getCategorie() {
-        apiService.getCategorie(this.$route.params.id).then((data) => {
-          this.id = data.id;
-          this.nom = data.nom;
-        })
-      },
-      sendForm() {
-        apiService.editCategorie(this.id, { nom: this.nom }).then(() => {
-          this.$router.push({ name: 'adminListCategories' });
-        });
-      }
-    },
-    mounted() {
-      this.getCategorie();
-    }
-  }
+  },
+  computed: {
+    ...mapGetters([
+      'getCategorieById',
+    ]),
+  },
+  created() {
+    this.categorie = this.getCategorieById(this.$route.params.id);
+  },
+};
 </script>

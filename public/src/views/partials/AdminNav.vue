@@ -1,3 +1,5 @@
+<!-- ./src/views/partials/AdminNav.vue -->
+
 <template>
   <div>
     <!-- Fixed navbar -->
@@ -43,3 +45,10 @@
     <br/>
   </div>
 </template>
+
+<script>
+
+export default {
+  name: 'AdminNav',
+};
+</script>

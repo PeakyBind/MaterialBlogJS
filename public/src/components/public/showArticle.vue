@@ -1,3 +1,5 @@
+<!-- ./src/components/public/showArticle.vue -->
+
 <template>
   <!-- Blog Entries Column -->
   <div class="col-md-8">
@@ -8,7 +10,7 @@
 
     <!-- Author -->
     <p class="lead">
-      by <a href="#">{{ auteurPseudo }}</a>
+      by <a href="#">Test</a>
     </p>
 
     <hr>
@@ -33,29 +35,31 @@
 </template>
 
 <script>
-  import APIService from '../../APIService';
-  import convertDate from "../../utils/convertDate";
-  const apiService = new APIService();
+import { mapGetters } from 'vuex';
+import convertDate from '../../utils/convertDate';
 
-  export default {
-    name: 'showArticle',
-    data() {
-      return {
-        auteurPseudo: '',
-        article: {}
-      }
+export default {
+  name: 'showArticle',
+  data() {
+    return {
+      article: {},
+    };
+  },
+  methods: {
+    convertDate,
+  },
+  watch: {
+    $route(to, from) {
+      this.article = this.getArticleById(this.$route.params.id);
     },
-    methods: {
-      getArticle() {
-        apiService.getArticle(this.$route.params.id).then((data) => {
-          this.article = data;
-          this.auteurPseudo = data.auteur.pseudo;
-        })
-      },
-      convertDate,
-    },
-    mounted() {
-      this.getArticle();
-    }
-  }
+  },
+  computed: {
+    ...mapGetters([
+      'getArticleById',
+    ]),
+  },
+  mounted() {
+    this.article = this.getArticleById(this.$route.params.id);
+  },
+};
 </script>

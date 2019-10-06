@@ -1,3 +1,5 @@
+<!-- ./src/components/admin/articles/AdminListArticles.vue -->
+
 <template>
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
@@ -38,40 +40,19 @@
 </template>
 
 <script>
-import APIService from '../../../APIService';
-const apiService = new APIService();
+import { mapState, mapActions } from 'vuex';
+import convertDate from '../../../utils/convertDate';
 
 export default {
   name: 'AdminListArticles',
-  data() {
-    return {
-      articles: [],
-    };
-  },
   methods: {
-    getArticles() {
-      apiService.getArticles().then((data) => {
-        this.articles = data.articles;
-      });
-    },
-    deleteArticle(id) {
-      apiService.deleteArticle(id).then(
-        () => {
-          let articleToDelete = this.articles.find((element) => {
-            return element.id === id
-          });
-          let articleToDeleteId = this.articles.indexOf(articleToDelete);
-          this.articles.splice(articleToDeleteId, 1);
-        }
-      );
-    },
-    convertDate(date) {
-      let newDate = new Date(date);
-      return newDate.toDateString()
-    }
+    ...mapActions([
+      'deleteArticle',
+    ]),
+    convertDate,
   },
-  mounted() {
-    this.getArticles();
-  },
+  computed: mapState([
+    'articles',
+  ]),
 };
 </script>

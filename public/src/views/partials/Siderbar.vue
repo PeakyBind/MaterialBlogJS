@@ -1,3 +1,5 @@
+<!-- ./src/views/partials/Sidebar.vue -->
+
 <template>
   <!-- Blog Sidebar Widgets Column -->
   <div class="col-md-4">
@@ -42,25 +44,12 @@
 </template>
 
 <script>
-  import APIService from "../../APIService";
-  const apiService = new APIService();
+import { mapState } from 'vuex';
 
-  export default {
-    name: 'Sidebar',
-    data: function () {
-      return {
-        categories: []
-      }
-    },
-    methods: {
-      getCategories() {
-        apiService.getCategories().then((data) => {
-          this.categories = data.categories;
-        })
-      }
-    },
-    mounted() {
-      this.getCategories();
-    }
-  }
+export default {
+  name: 'Sidebar',
+  computed: mapState([
+    'categories',
+  ]),
+};
 </script>

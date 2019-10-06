@@ -1,31 +1,34 @@
+// ./src/routeur.js
+
 import Vue from 'vue';
 import Router from 'vue-router';
 import setAuthorization from './middlewares/setAuthorisation';
 import checkAuthorization from './middlewares/checkAuthorization';
-import redirectIfLogged from "./middlewares/redirectIfLogged";
+import redirectIfLogged from './middlewares/redirectIfLogged';
 import Public from './views/Public.vue';
 import ShowArticle from './components/public/showArticle';
-import ShowCategorie from "./components/public/ShowCategorie";
+import ShowCategorie from './components/public/ShowCategorie';
 import Admin from './views/Admin';
 import AddArticle from './components/admin/articles/AddArticle';
-import AdminHome from "./components/admin/AdminHome";
-import EditArticle from "./components/admin/articles/EditArticle";
-import ListArticles from "./components/public/ListArticles";
-import LoginPanel from "./components/public/LoginPanel";
-import AdminListArticles from "./components/admin/articles/AdminListArticles";
-import AdminListCategories from "./components/admin/categories/AdminListCategories";
-import AddCategorie from "./components/admin/categories/AddCategorie";
-import EditCategorie from "./components/admin/categories/EditCategorie";
-import AdminListAuteurs from "./components/admin/auteurs/AdminListAuteurs";
-import AddAuteur from "./components/admin/auteurs/AddAuteur";
-import EditAuteur from "./components/admin/auteurs/EditAuteur";
-import AdminPosts from "./components/routeurs/AdminPosts";
-import AdminCategories from "./components/routeurs/AdminCategories";
-import AdminAuteurs from "./components/routeurs/AdminAuteurs";
+import AdminHome from './components/admin/AdminHome';
+import EditArticle from './components/admin/articles/EditArticle';
+import ListArticles from './components/public/ListArticles';
+import LoginPanel from './components/public/LoginPanel';
+import AdminListArticles from './components/admin/articles/AdminListArticles';
+import AdminListCategories from './components/admin/categories/AdminListCategories';
+import AddCategorie from './components/admin/categories/AddCategorie';
+import EditCategorie from './components/admin/categories/EditCategorie';
+import AdminListAuteurs from './components/admin/auteurs/AdminListAuteurs';
+import AddAuteur from './components/admin/auteurs/AddAuteur';
+import EditAuteur from './components/admin/auteurs/EditAuteur';
+import AdminPosts from './components/routeurs/AdminPosts';
+import AdminCategories from './components/routeurs/AdminCategories';
+import AdminAuteurs from './components/routeurs/AdminAuteurs';
 
 Vue.use(Router);
 
 const router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -52,7 +55,7 @@ const router = new Router({
           beforeEnter: redirectIfLogged,
           component: LoginPanel,
         },
-      ]
+      ],
     },
     {
       path: '/admin',
@@ -97,12 +100,12 @@ const router = new Router({
             {
               path: 'add',
               name: 'addCategorie',
-              component: AddCategorie
+              component: AddCategorie,
             },
             {
               path: 'edit/:id',
               name: 'editCategorie',
-              component: EditCategorie
+              component: EditCategorie,
             },
           ],
         },
@@ -118,14 +121,14 @@ const router = new Router({
             {
               path: 'add',
               name: 'addAuteur',
-              component: AddAuteur
+              component: AddAuteur,
             },
             {
               path: 'edit/:id',
               name: 'editAuteur',
-              component: EditAuteur
+              component: EditAuteur,
             },
-          ]
+          ],
         },
       ],
     },

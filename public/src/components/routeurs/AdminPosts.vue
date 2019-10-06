@@ -1,9 +1,11 @@
+<!-- ./src/components/routeurs/AdminPosts.vue -->
+
 <template>
     <router-view></router-view>
 </template>
 
 <script>
-  export default {
-    name: 'AdminPosts'
-  }
+export default {
+  name: 'AdminPosts',
+};
 </script>

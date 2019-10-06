@@ -1,3 +1,5 @@
+<!-- ./src/components/admin/auteurs/EditAuteur.vue -->
+
 <template>
   <div class="container theme-showcase" role="main">
 
@@ -9,7 +11,7 @@
       <form method="post">
         <div>
           <label for="pseudo" >Pseudo</label>
-          <input type="text" name="pseudo" id="pseudo" v-model="pseudo"/>
+          <input type="text" name="pseudo" id="pseudo" v-model="auteur.pseudo"/>
         </div>
         <div><input type="submit" @click.prevent="sendForm"/></div>
       </form>
@@ -19,32 +21,32 @@
 </template>
 
 <script>
-  import APIService from "../../../APIService";
-  const apiService = new APIService();
+import { mapGetters, mapActions } from 'vuex';
 
-  export default {
-    name: 'EditAuteur',
-    data() {
-      return {
-        id: String,
-        pseudo: String,
-      }
+export default {
+  name: 'EditAuteur',
+  data() {
+    return {
+      auteur: {},
+    };
+  },
+  methods: {
+    ...mapActions([
+      'editAuteur',
+    ]),
+    sendForm() {
+      this.editAuteur(this.auteur).then(() => {
+        this.$router.push({ name: 'adminListAuteurs' });
+      });
     },
-    methods: {
-      getAuteur() {
-        apiService.getAuteur(this.$route.params.id).then((data) => {
-          this.id = data.id;
-          this.pseudo = data.pseudo;
-        })
-      },
-      sendForm() {
-        apiService.editAuteur(this.id, { pseudo: this.pseudo }).then(() => {
-          this.$router.push({ name: 'adminListAuteurs' });
-        });
-      }
-    },
-    mounted() {
-      this.getAuteur();
-    }
-  }
+  },
+  computed: {
+    ...mapGetters([
+      'getAuteurById',
+    ]),
+  },
+  created() {
+    this.auteur = this.getAuteurById(this.$route.params.id);
+  },
+};
 </script>

@@ -1,3 +1,5 @@
+<!-- ./src/components/public/ShowCategorie.vue -->
+
 <template>
   <!-- Blog Entries Column -->
   <div class="col-md-8">
@@ -31,45 +33,31 @@
 </template>
 
 <script>
-  import APIService from '../../APIService';
-  import convertDate from "../../utils/convertDate";
-  const apiService = new APIService();
+import { mapGetters } from 'vuex';
+import convertDate from '../../utils/convertDate';
 
-  export default {
-    name: 'ShowCategorie',
-    data() {
-      return {
-        articles: {}
-      }
+export default {
+  name: 'ShowCategorie',
+  data() {
+    return {
+      articles: [],
+    };
+  },
+  methods: {
+    convertDate,
+  },
+  watch: {
+    $route(to, from) {
+      this.articles = this.getArticlesByCategorie(this.$route.params.id);
     },
-    methods: {
-      getArticles() {
-        apiService.getArticlesByCategorie(this.$route.params.id).then((data) => {
-          this.articles = data.articles;
-        })
-      },
-      convertDate,
-    },
-    mounted() {
-      this.getArticles();
-    }
-  };
+  },
+  computed: {
+    ...mapGetters([
+      'getArticlesByCategorie',
+    ]),
+  },
+  mounted() {
+    this.articles = this.getArticlesByCategorie(this.$route.params.id);
+  },
+};
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  h3 {
-    margin: 40px 0 0;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  a {
-    color: #42b983;
-  }
-</style>

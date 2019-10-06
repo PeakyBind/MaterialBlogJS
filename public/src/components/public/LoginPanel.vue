@@ -1,3 +1,5 @@
+<!-- ./src/components/public/LoginPanel.vue -->
+
 <template>
   <!-- Blog Entries Column -->
   <div class="col-md-8">
@@ -8,16 +10,16 @@
           <br>
           <div class="input-field">
             <i class="material-icons prefix">account_circle</i>
-            <input v-model="pseudo">
+            <input id="pseudo" v-model="user.pseudo">
             <label for="pseudo">Pseudo</label>
           </div>
           <div class="input-field">
             <i class="material-icons prefix">error</i>
-            <input v-model="password">
+            <input id="mdp" v-model="user.password">
             <label for="mdp">Password</label>
           </div>
           <div class="text-center">
-            <button @click.prevent="logIn" class="btn btn-info waves-effect waves-light">Connect</button>
+            <button @click.prevent="connect" class="btn btn-info waves-effect waves-light">Connect</button>
           </div>
         </form>
       </div>
@@ -26,27 +28,27 @@
 </template>
 
 <script>
-  import APIService from '../../APIService';
-  const apiService = new APIService();
+import { mapActions } from 'vuex';
 
-  export default {
-    name: 'LoginPanel',
-    data() {
-      return {
+export default {
+  name: 'LoginPanel',
+  data() {
+    return {
+      user: {
         pseudo: '',
-        password: ''
-      }
+        password: '',
+      },
+    };
+  },
+  methods: {
+    ...mapActions([
+      'logIn',
+    ]),
+    connect() {
+      this.logIn(this.user).then(() => {
+        this.$router.push({ name: 'adminHome' });
+      });
     },
-    methods: {
-      logIn() {
-        apiService.logIn({pseudo: this.pseudo, password: this.password}).then((data => {
-          if (data.user && data.token) {
-            sessionStorage.setItem('user', data.user);
-            sessionStorage.setItem('jwt', data.token);
-            this.$router.push({ name: 'adminHome' })
-          }
-        }));
-      }
-    }
-  }
+  },
+};
 </script>

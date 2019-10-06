@@ -1,3 +1,5 @@
+<!-- ./src/components/admin/articles/EditArticle.vue -->
+
 <template>
   <div class="container theme-showcase" role="main">
 
@@ -12,21 +14,17 @@
       <form method="post">
         <div>
           <label for="titre" >Titre</label>
-          <input type="text" name="titre" id="titre" v-model="titre"/>
-        </div>
-        <div>
-          <label for="slug">Slug</label>
-          <input type="text" name="slug" id="slug" v-model="slug"/>
+          <input type="text" name="titre" id="titre" v-model="article.titre"/>
         </div>
         <div>
           <label for="texte">Texte</label>
-          <textarea name="texte" id="texte" v-model="contenu"></textarea>
+          <textarea name="texte" id="texte" v-model="article.contenu"></textarea>
         </div>
 
         <!-- MENU DEROULANT DYNAMIQUE -->
         <div>
           <label for="auteur">Auteur</label>
-          <select name="auteur" id="auteur" v-model="auteur">
+          <select name="auteur" id="auteur" v-model="article.auteur.id">
             <option v-for="auteur in listAuteurs" :value="auteur.id">{{ auteur.pseudo }}</option>
           </select>
         </div>
@@ -62,68 +60,54 @@
 </template>
 
 <script>
-  import APIService from "../../../APIService";
-  const apiService = new APIService();
+import { mapState, mapGetters, mapActions } from 'vuex';
 
-  export default {
-    name: 'EditArticle',
-    data() {
-      return {
-        titre: String,
-        slug: String,
-        contenu: String,
-        auteur: String,
-        article: {},
-        listAuteurs: [],
-        listCategories: [],
-        checkedCategories: [],
-        imagePreview: String,
-        Form: FormData
-      }
+export default {
+  name: 'EditArticle',
+  data() {
+    return {
+      article: {},
+      checkedCategories: [],
+      imagePreview: String,
+      Form: FormData,
+    };
+  },
+  methods: {
+    ...mapActions([
+      'editArticle',
+    ]),
+    uploadImage(event) {
+      this.imagePreview = URL.createObjectURL(event.target.files[0]);
+      this.Form.append('image', event.target.files[0]);
     },
-    methods: {
-      getArticle() {
-        apiService.getArticle(this.$route.params.id).then((data) => {
-          this.id = data.id;
-          this.titre = data.titre;
-          this.slug = data.slug;
-          this.contenu = data.contenu;
-          this.auteur = data.auteur.id;
-          this.imagePreview = data.image;
-          this.checkedCategories = data.categories.map(categorie => {
-            return categorie.id;
-          });
-        })
-      },
-      getAuteurs() {
-        apiService.getAuteurs().then((data) => {
-          this.listAuteurs = data.auteurs;
-        });
-      },
-      getCategories() {
-        apiService.getCategories().then((data) => {
-          this.listCategories = data.categories;
-        });
-      },
-      uploadImage(event) {
-        this.imagePreview = URL.createObjectURL(event.target.files[0]);
-        this.Form.append('image', event.target.files[0]);
-      },
-      sendForm() {
-        this.Form.append('titre', this.titre);
-        this.Form.append('contenu', this.contenu);
-        this.Form.append('auteur', this.auteur);
-        this.Form.append('categories', this.checkedCategories);
-        apiService.editArticle(this.id, this.Form).then(() => {
-          this.$router.push({ name: 'adminHome' });
-        });
-      }
+    sendForm() {
+      this.Form.append('id', this.article.id);
+      this.Form.append('titre', this.article.titre);
+      this.Form.append('contenu', this.article.contenu);
+      this.Form.append('auteur', this.article.auteur.id);
+      this.Form.append('categories', JSON.stringify(this.checkedCategories));
+      console.log(this.Form.get('categories'));
+      this.editArticle(this.Form).then(() => {
+        this.$router.push({ name: 'adminHome' });
+      });
     },
-    mounted() {
-      this.Form = new FormData();
-      this.getAuteurs();
-      this.getCategories();
-      this.getArticle();
-    }
-  }
+  },
+  computed: {
+    ...mapState({
+      listAuteurs: 'auteurs',
+      listCategories: 'categories',
+    }),
+    ...mapGetters([
+      'getArticleById',
+    ]),
+  },
+  created() {
+    this.article = this.getArticleById(this.$route.params.id);
+  },
+  mounted() {
+    this.Form = new FormData();
+    this.checkedCategories = this.article.categories.map(categorie => categorie.id);
+    this.imagePreview = this.article.image;
+  },
+};
 </script>

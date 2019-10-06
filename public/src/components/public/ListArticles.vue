@@ -1,3 +1,5 @@
+<!-- ./src/components/public/ListArticles.vue -->
+
 <template>
   <!-- Blog Entries Column -->
   <div class="col-md-8">
@@ -31,45 +33,16 @@
 </template>
 
 <script>
-  import APIService from '../../APIService';
-  import convertDate from "../../utils/convertDate";
-  const apiService = new APIService();
+import { mapState } from 'vuex';
+import convertDate from '../../utils/convertDate';
 
-  export default {
-    name: 'ListArticles',
-    data() {
-      return {
-        articles: []
-      }
-    },
-    methods: {
-      getArticles() {
-        apiService.getArticles().then((data) => {
-          this.articles = data.articles;
-        })
-      },
-      convertDate,
-    },
-    mounted() {
-      this.getArticles();
-    }
-  };
+export default {
+  name: 'ListArticles',
+  methods: {
+    convertDate,
+  },
+  computed: mapState([
+    'articles',
+  ]),
+};
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>

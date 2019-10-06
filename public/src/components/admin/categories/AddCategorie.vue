@@ -1,3 +1,5 @@
+<!-- ./src/components/admin/categories/AddCategorie.vue -->
+
 <template>
   <div class="container theme-showcase" role="main">
 
@@ -9,7 +11,7 @@
       <form method="post">
         <div>
           <label for="nom" >Nom</label>
-          <input type="text" name="nom" id="nom" v-model="nom"/>
+          <input type="text" name="nom" id="nom" v-model="categorie.nom"/>
         </div>
         <div><input type="submit" @click.prevent="sendForm"/></div>
       </form>
@@ -19,26 +21,26 @@
 </template>
 
 <script>
-  import APIService from '../../../APIService';
-  const apiService = new APIService();
+import { mapActions } from 'vuex';
 
-  export default {
-    name: 'AddArticle',
-    data() {
-      return {
+export default {
+  name: 'AddArticle',
+  data() {
+    return {
+      categorie: {
         nom: '',
-      };
-    },
-    methods: {
-      sendForm() {
-        let form = {
-          nom: this.nom
-        };
-        apiService.addCategorie(form).then(() => {
-          this.$router.push({ name: 'adminListCategories' });
-        });
-
       },
+    };
+  },
+  methods: {
+    ...mapActions([
+      'addCategorie',
+    ]),
+    sendForm() {
+      this.addCategorie(this.categorie).then(() => {
+        this.$router.push({ name: 'adminListCategories' });
+      });
     },
-  };
+  },
+};
 </script>

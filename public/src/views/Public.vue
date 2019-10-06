@@ -1,3 +1,5 @@
+<!-- ./src/views/Public.vue -->
+
 <template>
   <div>
     <default-nav></default-nav>
@@ -20,7 +22,6 @@
 
 <script>
 
-import ListArticles from '../components/public/ListArticles';
 import Sidebar from './partials/Siderbar';
 import Foot from './partials/Foot';
 import DefaultNav from './partials/DefaultNav';
@@ -28,10 +29,9 @@ import DefaultNav from './partials/DefaultNav';
 export default {
   name: 'public',
   components: {
-    ListArticles,
     Sidebar,
     Foot,
-    DefaultNav
+    DefaultNav,
   },
 };
 </script>

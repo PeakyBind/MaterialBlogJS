@@ -1,3 +1,5 @@
+<!-- ./src/views/partials/Foot.vue -->
+
 <template>
   <footer class="page-footer info-color darken-1" if="footer">
     <div class="container">
@@ -34,9 +36,8 @@
 </template>
 
 <script>
-  import checkAuthorization from "../../middlewares/checkAuthorization";
 
-  export default {
-    name: 'Foot'
-  }
+export default {
+  name: 'Foot',
+};
 </script>

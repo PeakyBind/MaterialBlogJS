@@ -1,3 +1,5 @@
+<!-- ./src/views/Admin.vue -->
+
 <template>
   <div>
     <admin-nav></admin-nav>

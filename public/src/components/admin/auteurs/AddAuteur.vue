@@ -1,3 +1,5 @@
+<!-- ./src/components/admin/auteurs/AddAuteur.vue -->
+
 <template>
   <div class="container theme-showcase" role="main">
 
@@ -9,7 +11,7 @@
       <form method="post">
         <div>
           <label for="pseudo" >Pseudo</label>
-          <input type="text" name="pseudo" id="pseudo" v-model="pseudo"/>
+          <input type="text" name="pseudo" id="pseudo" v-model="auteur.pseudo"/>
         </div>
         <div><input type="submit" @click.prevent="sendForm"/></div>
       </form>
@@ -19,26 +21,26 @@
 </template>
 
 <script>
-  import APIService from '../../../APIService';
-  const apiService = new APIService();
+import { mapActions } from 'vuex';
 
-  export default {
-    name: 'AddAuteur',
-    data() {
-      return {
-        pseudo: ''
-      };
-    },
-    methods: {
-      sendForm() {
-        let form = {
-          pseudo: this.pseudo
-        };
-        apiService.addAuteur(form).then(() => {
-          this.$router.push({ name: 'adminListAuteurs' });
-        });
-
+export default {
+  name: 'AddAuteur',
+  data() {
+    return {
+      auteur: {
+        pseudo: '',
       },
+    };
+  },
+  methods: {
+    ...mapActions([
+      'addAuteur',
+    ]),
+    sendForm() {
+      this.addAuteur(this.auteur).then(() => {
+        this.$router.push({ name: 'adminListAuteurs' });
+      });
     },
-  };
+  },
+};
 </script>

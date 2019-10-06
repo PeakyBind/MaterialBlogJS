@@ -1,4 +1,6 @@
+// ./src/utils/convertDate.js
+
 export default function (date) {
-  let newDate = new Date(date);
+  const newDate = new Date(date);
   return newDate.toDateString();
 }
